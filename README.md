@@ -60,12 +60,169 @@ A *Body* is a single, contiguous object in the *Part Design* workbench. You add 
 
 > This navigation style is the *TinkerCAD* scheme we set in the Preferences window earlier. You are welcome to change the style if it is not to your liking.
 
-## 3. Variable Set
+ * Click **File > Save** to save your document, which will rename it in the tree view (e.g. "box")
+ * Right-click on the **Body** in the tree view, click **rename** and give the body the name "base" (as this will be the base of our box that mates with the lid)
+
+![Renamed document and body](.images/screen-05.png)
+
+## 3. Variable Set (VarSet)
 
 The thing that makes *parametric* modeling unique (as opposed to *direct* modeling that you might find in e.g. Blender) is the ability to set parameters and relationships among your different design elements. For example, we can set a box length and width that can be adjusted long after we finish our design to easily scale our box! There are a number of ways to accomplish this in FreeCAD, such as sketch parameters or spreadsheets, but we'll use a *variable set*.
 
- * 
+ * Click on your **box** document to select it
 
+We want the VarSet to be placed under the *document* (and not the *body*) in the tree view. This will make the properties easier to access in future steps.
+
+ * Click the **variable set** button (looks like curly braces **{ }** in your toolbar)
+ * Click **Cancel** to ignore the pop-up window (notice that the VarSet is still created)
+
+![Creating a new VarSet](.images/screen-06.png)
+
+This process adds a value to the variable set. Note that we are using the type *PropertyLength* for all of these properties, as we're using them for various length (line, pad, pocket, etc.) dimensions. You can set other types if needed.
+
+ * Click on **VarSet** in the tree view, which will open the variable set in the *properties editor* (just below the *tree view* pane)
+ * Click on **VarSet** (the *Label*) and rename it to `Dimensions`
+ * Right-click in the properties pane, select **Add property**
+ * Set the *Name* to **Length**
+ * Click **OK**
+
+![Adding property to VarSet](.images/screen-07.png)
+
+ * Click on the **0.00 mm** in the *Length* property value and change it to **60 mm**
+ * Repeat this process to add the following properties:
+   * BaseHeight: **15 mm**
+   * Fillet: **4 mm**
+   * Gap: **0.2 mm**
+   * LidHeight: **5 mm**
+   * Lip: **3 mm**
+   * Wall: **2 mm**
+   * Width: **40 mm**
+
+![VarSet in FreeCAD](.images/screen-08.png)
+
+We now have a full set of global variables (in our document) that we can use to adjust different dimensions in our design!
+
+## 4. Base Sketch
+
+We will create a sketch to define the bottom part of our box.
+
+ * Click on the **sketch** button
+ * Select the *XY Plane* (in the viewer or in the *task pane*)
+ * Click **OK**
+
+![Creating sketch](.images/screen-09.png)
+
+This will change to the *Sketch* workbench automatically and rotate your view so that you are looking down onto the XY plane.
+
+ * Use the drop-down menu next to the *rectangle* button to select **Rounded rectangle**
+
+![Rounded rectangle](.images/screen-10.png)
+
+ * Click the **Rounded rectangle* button
+ * Click to in the viewer to place the first marker
+ * Click in a quandrant opposite the origin to place the second marker
+ * Move the mouse to adjust the size of the fillets, click a third time to set the fillet size
+ * Note that the exact dimensions do not matter yet! We will add constraints next.
+ * Press `esc` to exit the *Rounded rectangle* tool mode (the *Rounded rectangle* icon next to your mouse will disappear)
+
+> Note: Try to make your rounded rectangle similar to the one shown below. By exiting the *Rounded rectangle* tool mode (with `esc`), you can click and drag lines, arcs, and points around to adjust the size/shape of the rounded rectangle. No need to be exact--you just want the arcs/corners in each quandrant around the origin. It will make the next part easier.
+
+![Rounded rectangle](.images/screen-11.png)
+
+Notice the *Under-constrained* number under the *Solver messages* section in the *Task pane*. "5 DoF(s)" means "5 degrees of freedom." This is the number of possible movements in a part (or assembly) in a 3-dimensional space: X, Y, or Z. Because this a 2D sketch, this refers to the number of movements in 2D space.
+
+In our particular case, the 5 DoFs refer to:
+ 1. Length
+ 2. Width
+ 3. X position of the rectangle
+ 4. Y position of the rectangle
+ 5. Fillet radius
+
+The goal of adding constraints is to fully define the sketch (with *relational* or *dimensional* constraints) so that the DoF counter goes to 0. As you add constraints, parts of the sketch will turn green. When the whole sketch is *bright green* and the DoF counter is 0, you're done!
+
+> Note: Yes, you can exit a sketch early without fully constraining it. However, in most CAD flows, this is not advised, as it could lead to problems later on.
+
+Let's add some constraints! I generally recommend to use *relational* constraints first, where possible, before adding *dimensional* constraints (usually numbers).
+
+ * Click the **Constrain symmetric** button
+ * Click the **center node** of one of the **corner arcs** (green in the image)
+ * Click the **center node** of the **opposite corner arc** (green in the image)
+ * Click the **origin** node
+
+![Entering the length dimension](.images/screen-12.png)
+
+Your rectangle should now be centered. Because we've effectively constrained the X and Y coordinates, your DoFs should now be down to 3. With our *relational* constraints done, let's add our *dimensional* constraints.
+
+ * Click the **Dimension** button
+ * Click one of the **top nodes** in the sketch (green in the image)
+ * Click one of the **bottom nodes** in the sketch (green in the image)
+ * Drag the dimension to the side so that it is vertical
+ * Click to place the dimension (careful not to click another line, node, or the X-axis!), which will cause a pop-up box to appear
+ * Click the **Function** button in the pop-up box, which will cause another pop-up box to appear
+ * Enter `<<Dimensions>>.Base_Length` to use the length we set earlier (40 mm)
+   * The "<< >>" markers denote the *label* we set for the VarSet
+   * The prefix "Base_" is added to the property name, as that's the group the property belongs to in the VarSet
+ * Click **OK** twice to exit both pop-up boxes
+
+![Entering the length dimension](.images/screen-13.png)
+
+ * Repeat this process to set the *Width* of the rounded rectangle. Use `<<Dimensions>>.Base_Width`.
+
+![Entering the width dimension](.images/screen-14.png)
+
+We should have 1 DoF left: the fillet radius. The *Dimension* tool is a smart tool that figures out if you want to set the width, height, distance, radius, etc. You can use the drop-down button next to the *Dimension* tool if you'd like to have better control of the sub-tools, but for now, we'll stick with the *Dimension* tool (as it's easier to use).
+
+ * With the *Dimension* tool selected, click on one of the **arcs** in your rounded rectangle
+ * Use the *Expression editor* to enter `<<Dimensions>>.Base_Fillet` (like we've been doing)
+
+![Entering the fillet dimension](.images/screen-15.png)
+
+Make sure you've exited all of the pop-up windows. Your sketch should be bright green, and your *Under-constrained* counter should say "0 DoF(s)." If so, you've fully constrained your first sketch!
+
+ * Click **Close** in the *Tasks* pane to exit the *Sketcher* workbench
+
+## 5. Create the Base
+
+Now that we have a basic sketch, we can pad (aka "extrude") it to form the basis of our box.
+
+ * Click **Origin** and press `space` to hide it (so we can see what we're doing)
+ * Click the **Sketch** that we just made to select it
+ * Press the **Pad** button
+ * In the *Tasks* pane, click the **Function** button in the *Length* field to bring up the *Expression editor*
+ * Enter `<<Dimensions>>.Base_BaseHeight`
+ * Click **OK** to accept the expression
+ * Click **OK** in the *Tasks* pane to accept the *pad* properties
+
+![Padding the sketch](.images/screen-16.png)
+
+This is the basic flow of the *Part Design* workbench: you define a profile of a part of an object using a sketch, and then you pad (or pocket) that sketch to create a *feature*. Next, let's hollow out the base of our box using the *Pocket* function.
+
+ * Click the top face of the box we just created. It should turn green (see image)
+ * Click the **Sketch** button to create a sketch on that face
+
+![Creating a sketch on a face](.images/screen-17.png)
+
+* Draw another **Rounded rectangle** (similar to the previous one)
+* Add the following constraints (notice we can use math for our functions):
+  * **Symmetrical** about the origin
+  * **Length**: `<<Dimensions>>.Base_Length - (2 * <<Dimensions>>.Base_Wall)`
+  * **Width**: `<<Dimensions>>.Base_Width - (2 * <<Dimensions>>.Base_Wall)`
+  * **Fillet**: `<<Dimensions>>.Base_Fillet - <<Dimensions>>.Base_Wall`
+
+![Defining the sketch for our pocket](.images/screen-18.png)
+
+ * Make sure that your sketch is fully constrained
+ * Click **Close** in the *Tasks* pane
+ * Click your new sketch (**Sketch001**) in the *Tree view*
+ * Click the **Pocket** button
+ * Click the **Function** button for *Length* in the *Tasks* pane
+ * Enter the expression: `<<Dimensions>>.Base_BaseHeight - <<Dimensions>>.Base_Wall`
+ * Click **OK** in the *Expression editor*
+ * Click **OK** in the *Tasks* pane
+
+![Creating our pocket](.images/screen-19.png)
+
+# -----------
 
 ## **1\. Setting Up Global Parameters with Spreadsheets**
 
