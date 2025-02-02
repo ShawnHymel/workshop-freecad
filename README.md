@@ -222,127 +222,117 @@ This is the basic flow of the *Part Design* workbench: you define a profile of a
 
 ![Creating our pocket](.images/screen-19.png)
 
-# -----------
+## 6. Create the Lip
 
-## **1\. Setting Up Global Parameters with Spreadsheets**
+Now that we've created the bottom of the box, let's make the lip that will hold the lid in place. We won't include any locking mechanisms (e.g. tabs), but feel free to add those if you wish.
 
-Using a spreadsheet in FreeCAD allows you to define global parameters that can be referenced throughout your design. This makes your model parametric and easily adjustable.
+ * Click the top face of the base (it will turn green)
+ * Click the **Sketch** button to start a new sketch on the top of the base
 
-### **Steps:**
+![Creating a lip sketch](.images/screen-20.png)
 
-1. **Create a New Document**:  
-   * Open FreeCAD.  
-   * Close any previous documents.  
-   * Go to **File** \> **New**.  
-2. **Switch to Spreadsheet Workbench**:  
-   * Select **Spreadsheet** from the workbench selector.  
-3. **Create a New Spreadsheet**:  
-   * Click the **New Spreadsheet** icon.  
-   * Rename the spreadsheet to `globals` by right-clicking on it in the tree view and selecting **Rename**.  
-4. **Define Parameters**:  
-   * In column A, list the parameter names:  
-     * `length`  
-     * `width`  
-     * `base_height`  
-     * `lid_height`  
-     * `fillet`  
-     * `thickness`  
-     * `gap`  
-   * In column B, enter the corresponding values.  
-     * `60 mm` (length)  
-     * `40 mm` (width)  
-     * `10 mm` (base\_height)  
-     * `10 mm` (lid\_height)  
-     * `4 mm` (fillet)  
-     * `2 mm` (thickness)  
-     * `0.2 mm` (gap)  
-   * **Note**: Adjust these values as desired.  
-5. **Assign Aliases**:  
-   * Right-click on each cell in column B.  
-   * Select **Properties** \> **Alias**.  
-   * Assign the alias matching the parameter name (e.g., cell B1 alias is `length`).
+Rather than use our usual *Base_Length* and *Base_Width* dimensions from our *VarSet*, we will base our new sketch on previous feautures.
 
-%%%screen-01
+ * Click the **Create external geometry** button
+ * Click on one of the **inside rounded fillet lines**
+ * You should see a dashed pink line appear over the fillet line
 
-## **2\. Designing the Box Base**
+![Using external geometry as a reference](.images/screen-21.png)
 
-We'll use the Part Design workbench to create the base of the box.
+ * Create a *rounded rectangle*
+ * Use the *symmetry* constraint to make it symmetrical about the origin (like we've been doing)
 
-### **Steps:**
+![Creating a rounded rectangle](.images/screen-22.png)
 
-1. **Switch to Part Design Workbench**:  
-   * Select **Part Design** from the workbench selector.  
-2. **Create a New Body**:  
-   * Click the **Create Body** icon.  
-3. **Create a New Sketch**:  
-   * Click the **Create Sketch** icon.  
-   * Select the **XY plane**.  
-4. **Draw the Base Rectangle with Fillets**:  
-   * Use the **Rectangle** tool to draw a rectangle centered around the origin.  
-   * Use the **Fillet** tool to round all four corners.  
-   * Apply **Equal Constraint** to all fillets to keep them the same size.  
-5. **Constrain the Sketch**:  
-   * **Set Length and Width**:  
-     * Use the **Dimension** tool.  
-     * Click on opposing points of the rectangle.  
-     * Enter expressions referencing the spreadsheet (enter ‘=’ or click on the small equation editor icon):  
-       * Length: `<<globals>>.length`  
-       * Width: `<<globals>>.width`  
-   * **Set Fillet Radius**:  
-     * Click on a fillet arc.  
-     * Set radius: `<<globals>>.fillet`  
-   * **Center the Sketch**:  
-     * Use the **Symmetry Constraint** to center the rectangle around the origin.
+ * Use the drop-down menu by the *Constrain horizontal/vertical* button to select the **Constrain horizontal** tool
+ * Click on the bottom point of the **external geometry arc** and the bottom point of the **rounded rectangle fillet** you just made (constraint 21 in the image)
+ * Select the **Constrain vertical** tool
+ * Click on the top point of the **external geometry arc** and the top point of the **rounded rectangle fillet** you just made (constraint 22 in the image)
 
-%%%screen-02
+![Constraining the fillet points](.images/screen-23.png)
 
-6. **Pad the Sketch**:  
-   * Click **Close** to exit the sketch.  
-   * With the sketch selected, click the **Pad** icon.  
-   * Set the pad length: `<<globals>>.base_height`.
+You should now be able to adjust only the size of the rounded rectangle, and your number of constraints should read *1 DoF(s)*. We just need to set the width of our lip!
 
-%%%screen-03
+ * Drag the rounded rectangle so that it is outside the *external geometry* arc that we imported
+ * Click the **Dimension** constraint tool
+ * Click the top point of the **external geometry arc** and the top point of the **rounded rectangle fillet**
+ * Drag the dimension marker to an appropriate spot and click to place it
+ * Click the **function** button
+ * Enter the equation: `(<<Dimensions>>.Base_Wall / 2) - <<Dimensions>>.Base_Gap`
+ * Click **OK** on the pop-up windows to close them
 
-7. **Create outer lip:**  
-   * Create a sketch on top of the box  
-   * Create a rounded rectangle  
-   * Make it symmetrical about the origin  
-   * Give it the following dimensions:  
-     * Length: \<\<globals\>\>.length \- \<\<globals\>\>.thickness  
-     * Width: \<\<globals\>\>width \- \<\<globals\>\>.thickness  
-     * Fillet radius: \<\<globals\>\>fillet \- \<\<globals\>\>.thickness / 2  
-   * Give each of the dimensions names:  
-     * Length: lip\_length  
-     * Width: lip\_width  
-     * Fillet: lip\_fillet  
-8. **Create inner lip:**  
-   * Create another rounded rectangle inside the first one  
-   * Make it symmetrical about the origin  
-   * Give it the following dimensions:  
-     * Length: \<\<globals\>\>.length \- 2 \* \<\<globals\>\>.thickness  
-     * Width: \<\<globals\>\>width \- 2 \* \<\<globals\>\>.thickness  
-     * Fillet radius: \<\<globals\>\>fillet \- \<\<globals\>\>.thickness
+![Adding a gap in the lip](.images/screen-24.png)
 
-%%%screen-04
+We make the lip about half the thickness of the wall to allow the lid to have a similar lip that slides over top this one. We leave a gap (of 0.2 mm), as 3D printing is not very accurate. 0.2mm should be enough to ensure a snug fit between the base and the lid.
 
-9. **Pad the lip**  
-   * Select previous sketch, pad 3 mm  
-10. **Create pocket sketch**  
-    * Create a new sketch on the top of the original box base  
-    * Use the **external geometry** tool to bring in parts of the inner lip (should create pink dashed lines denoting external reference geometry)  
-    * Draw a rounded rectangle  
-    * Set the sides and fillet to be equal to the external geometry
+Now, we need to make the inner part of the lip so that it maintains the hole in the box.
 
-%%%screen-05
+ * Create another **rounded rectangle**
+ * Make it **symmatrically constrained** around the origin
 
-* Set the rounded rectangle to be symmetrical about the origin  
-  * When the sketch is fully constrained, close out of the sketch  
-11. **Create a pocket**  
-    * Select the previous sketch  
-    * Click the **Pocket** tool  
-    * Set the pocket depth: \<\<globals\>\>.base\_height \- \<\<globals\>\>.thickness
+![Making another rounded rectangle symmetric about the origin](.images/screen-25.png)
 
-%%%screen-06
+ * Click the **Constrain coincident** button
+ * Click the **top node** on the fillet of the rounded rectangle we just made
+ * Click the **top node** on the fillet of the matching external geometry arc
+
+This should cause the two points to "stick" together.
+
+![Making coincident constraints](.images/screen-26.png)
+
+ * Repeat the same process to *coincidentally constrain* the **bottom nodes** of the arcs
+
+Notice that the sketch turns *orange*, and you should see an error in the *Tasks* pane that you have *redundant constraints*. That's OK! We're going to fix that next.
+
+![Adding another coincident constraint](.images/screen-27.png)
+
+A *redundant constraint* occurs when you have too many constraints on a sketch, often with conflicting objectives (e.g. trying to set a length of something to both 10 cm and 20 cm at the same time). When this happens, you should stop what you're doing and resolve the redundancy (as trying to track them down later becomes more difficult).
+
+ * Take a look at the *redundant constraint number* in the *Tasks* pane. Mine says "35" (yours might be a different number)
+ * Scroll down in the *Constraints* pane to find that constraint number
+ * Right click on the constraint and select **delete**
+
+![Remove redundant constraints](.images/screen-28.png)
+
+Your sketch should correct itself and be completely constrained! The redundant constraint (35 for me) was a *horizontal* constraint put on one of the lines in the rounded rectangle. It was automatically placed there by FreeCAD when we created the rounded rectangle, but by setting the coincident constraints, it was no longer needed.
+
+![Fully constrained sketch](.images/screen-29.png)
+
+ * Make sure your sketch is fully constrained
+ * Click **Close** in the *Tasks* pane
+ * Click to select sketch you just made (*Sketch002*)
+ * Click the **Pad** button
+ * Click the **Function** button for *Length* in the *Tasks* pane
+ * Enter the following into the *Expression editor*: `<<Dimensions>>.Base_Lip`
+ * Click **OK** in the *Expression editor*
+ * Click **OK** in the *Tasks* pane to accept the pad
+
+![Padding the lip](.images/screen-30.png)
+
+## 7. Add a Chamfer to the Base
+
+While the base is completely function, we can make it a little more stylish by adding a *chamfer*. This is similar to a *fillet* but uses an angled edge rather than a curve. Read [this article](https://www.china-machining.com/blog/fillet-vs-chamfer-differences/) to learn more about the differences between the two and best practices.
+
+ * With nothing selected in the main view, use your mouse to flip the part over so you can see the bottom side
+ * Click the **Chamfer** button
+ * Click on all four edges (lines) and all four fillet corners (arcs) on the bottom, which should turn pink in the main view
+
+![Selecting edges to chamfer](.images/screen-31.png)
+
+ * Change the *Size* to `2 mm` in the *Tasks* pane
+ * Click **Preview**
+* Click **OK** in the *Tasks* pane when you are happy with the chamfer
+
+> **Note**: The *Preview* button will turn into a *Select* button. You can switch between these two modes if you want to select new edges to include or preview what the chamfer will look like.
+
+![Previewing the chamfer](.images/screen-32.png)
+
+## 8. Using a Sub-Shape Binder as Reference
+
+
+
+
+## ---
 
 ## **3\. Creating the Lid**
 
