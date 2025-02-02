@@ -7,9 +7,9 @@ When you are done, you are welcome to 3D print the design.
 
 ![FreeCAD box demo 3D printed](.images/freecad-box-demo.png)
 
-Want to go beyond this workshop? Check out my full *Introduction to 3D Printing and FreeCAD* series here:
+Want to go beyond this workshop? Check out my full [Introduction to 3D Printing and FreeCAD series](https://www.youtube.com/watch?v=8VPYTTnqmfs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1).
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rbe8otH8vMs?list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![Intro to FreeCAD video series](https://img.youtube.com/vi/8VPYTTnqmfs/0.jpg)](https://www.youtube.com/watch?v=8VPYTTnqmfs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1)
 
 ## 1. Installation and Configuration
 
