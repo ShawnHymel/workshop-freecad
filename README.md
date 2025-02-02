@@ -3,15 +3,37 @@ In this workshop, we create a simple two-part box (base and lid) using FreeCAD. 
  * **Audience**: Beginners
  * **Estimated time**: 2 hours
 
+## Table of Contents
+
+- [Finished Design](#finished-design)
+- [Tutorial](#tutorial)
+   * [1. Installation and Configuration](#1-installation-and-configuration)
+   * [2. Part Design Workbench and Navigation](#2-part-design-workbench-and-navigation)
+   * [3. Variable Set (VarSet)](#3-variable-set-varset)
+   * [4. Base Sketch](#4-base-sketch)
+   * [5. Create the Base](#5-create-the-base)
+   * [6. Create the Lip](#6-create-the-lip)
+   * [7. Add a Chamfer to the Base](#7-add-a-chamfer-to-the-base)
+   * [8. Using a Sub-Shape Binder as Reference to Make the Lid](#8-using-a-sub-shape-binder-as-reference-to-make-the-lid)
+   * [9. Move Sketch and Create Lid Extrusion](#9-move-sketch-and-create-lid-extrusion)
+   * [10. Challenge: Finish the Lid](#10-challenge-finish-the-lid)
+   * [11. Adjusting Global Variables](#11-adjusting-global-variables)
+   * [12. Export for 3D Printing](#12-export-for-3d-printing)
+- [License](#license)
+
+## Finished Design
+
 When you are done, you are welcome to 3D print the design.
 
 ![FreeCAD box demo 3D printed](.images/freecad-box-demo.png)
 
-Want to go beyond this workshop? Check out my full [Introduction to 3D Printing and FreeCAD series](https://www.youtube.com/watch?v=8VPYTTnqmfs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1).
+Want to go beyond this workshop? Check out my full [Introduction to 3D Printing and FreeCAD series](https://www.youtube.com/watch?v=rbe8otH8vMs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1).
 
-[![Intro to FreeCAD video series](https://img.youtube.com/vi/8VPYTTnqmfs/0.jpg)](https://www.youtube.com/watch?v=8VPYTTnqmfs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1)
+[![Intro to FreeCAD video series](https://img.youtube.com/vi/8VPYTTnqmfs/0.jpg)](https://www.youtube.com/watch?v=rbe8otH8vMs&list=PLEBQazB0HUyTQkRkbD02DZqnlV6oBMhHB&index=1)
 
-## 1. Installation and Configuration
+## Tutorial
+
+### 1. Installation and Configuration
 
 Head to [freecad.org](https://www.freecad.org/) to download the latest version of FreeCAD.
 
@@ -25,7 +47,7 @@ Open FreeCAD, and click **Edit > Preferences...** In the navigation pane on the 
 
 > *Note*: I personally found the TinkerCAD navigation to be the most intuitive (i.e. it matched my Cura slicer navigation style). Feel free to try other navigation schemes to find one you like. Any navigation instructions given in this guide will be based on the TinkerCAD navigation style.
 
-## 2. Part Design Workbench and Navigation
+### 2. Part Design Workbench and Navigation
 
 When you first opened FreeCAD, you probably noticed a number of buttons at the top. These determine what actions you can take within a given *workbench*. A *workbench* is a collection of tools, buttons, views, etc. that allow you to act upon some object or document. Think of workbenches just like workbenches in a machine shop: each has its own uses and tools.
 
@@ -65,7 +87,7 @@ A *Body* is a single, contiguous object in the *Part Design* workbench. You add 
 
 ![Renamed document and body](.images/screen-05.png)
 
-## 3. Variable Set (VarSet)
+### 3. Variable Set (VarSet)
 
 The thing that makes *parametric* modeling unique (as opposed to *direct* modeling that you might find in e.g. Blender) is the ability to set parameters and relationships among your different design elements. For example, we can set a box length and width that can be adjusted long after we finish our design to easily scale our box! There are a number of ways to accomplish this in FreeCAD, such as sketch parameters or spreadsheets, but we'll use a *variable set*.
 
@@ -94,7 +116,7 @@ This process adds a value to the variable set. Note that we are using the type *
    * Fillet: **4 mm**
    * Gap: **0.2 mm**
    * LidHeight: **5 mm**
-   * Lip: **3 mm**
+   * Lip: **2 mm**
    * Wall: **2 mm**
    * Width: **40 mm**
 
@@ -102,7 +124,7 @@ This process adds a value to the variable set. Note that we are using the type *
 
 We now have a full set of global variables (in our document) that we can use to adjust different dimensions in our design!
 
-## 4. Base Sketch
+### 4. Base Sketch
 
 We will create a sketch to define the bottom part of our box.
 
@@ -181,7 +203,7 @@ Make sure you've exited all of the pop-up windows. Your sketch should be bright 
 
  * Click **Close** in the *Tasks* pane to exit the *Sketcher* workbench
 
-## 5. Create the Base
+### 5. Create the Base
 
 Now that we have a basic sketch, we can pad (aka "extrude") it to form the basis of our box.
 
@@ -222,7 +244,7 @@ This is the basic flow of the *Part Design* workbench: you define a profile of a
 
 ![Creating our pocket](.images/screen-19.png)
 
-## 6. Create the Lip
+### 6. Create the Lip
 
 Now that we've created the bottom of the box, let's make the lip that will hold the lid in place. We won't include any locking mechanisms (e.g. tabs), but feel free to add those if you wish.
 
@@ -303,13 +325,13 @@ Your sketch should correct itself and be completely constrained! The redundant c
  * Click to select sketch you just made (*Sketch002*)
  * Click the **Pad** button
  * Click the **Function** button for *Length* in the *Tasks* pane
- * Enter the following into the *Expression editor*: `<<Dimensions>>.Base_Lip`
+ * Enter the following into the *Expression editor*: `<<Dimensions>>.Base_Lip - <<Dimensions>>.Base_Gap`
  * Click **OK** in the *Expression editor*
  * Click **OK** in the *Tasks* pane to accept the pad
 
 ![Padding the lip](.images/screen-30.png)
 
-## 7. Add a Chamfer to the Base
+### 7. Add a Chamfer to the Base
 
 While the base is completely function, we can make it a little more stylish by adding a *chamfer*. This is similar to a *fillet* but uses an angled edge rather than a curve. Read [this article](https://www.china-machining.com/blog/fillet-vs-chamfer-differences/) to learn more about the differences between the two and best practices.
 
@@ -327,186 +349,144 @@ While the base is completely function, we can make it a little more stylish by a
 
 ![Previewing the chamfer](.images/screen-32.png)
 
-## 8. Using a Sub-Shape Binder as Reference
+### 8. Using a Sub-Shape Binder as Reference to Make the Lid
 
+Now it's time to make the lid! As mentioned, a Part Design *Body* must be one *continguous* part. Since we want our lid to be separate from the base, we need to make it as a separate body.
 
+ * Click the **Create body** button
+ * Right-click on the new body in the *Tree view* and rename it to `lid`
 
+![Create a new body for the lid](.images/screen-33.png)
 
-## ---
+Unfortunately, the lid and base are unable to share dimensions with each other (except through VarSets or spreadsheets). However, we can create a reference of one body in another body. This is known as a [sub-object shape binder](https://wiki.freecad.org/PartDesign_SubShapeBinder) or a *sub-shape binder*. Let's create a sub-shape binder of our base in our lid body so we can use it as a reference part.
 
-## **3\. Creating the Lid**
+ * Make sure the **lid** is the active body (highlighted in dark blue in the *Tree view)
+   * If it is not the active body, double-click it in the **Tree view** to make it the active body
+ * Click to select the **base** body in the *Tree view* (will turn light blue)
+ * Click the **sub-object shape(s) binder** button
 
-We'll create a lid that fits snugly over the base using a second body and a sub-shape binder.
+![Add a sub-shape binder](.images/screen-34.png)
 
-### **Steps:**
+ * Right-click on the **base** in the *Tree view* and select **Toggle visibility**
+   * You can also select the base and press `space` to hide/show the body
+   * Even though the main body is hidden, the binder (reference) is still visible as a translucent yellow body
+ * With the *lid* as the active body (dark blue), click **Create sketch** button
+ * Select the **XY plane**
+ * Click **OK** in the *Tasks* pane
 
-1. **Create a New Body for the Lid**:  
-   * Click the **Create Body** icon.  
-   * Rename this body to `lid` by right-clicking and selecting **Rename**.  
-2. **Create a Sub-Shape Binder**:  
-   * Make sure `lid` is the active body.  
-   * Select the `base` body in the tree view.  
-   * Click the **SubShapeBinder** icon (green icon).  
-   * This creates a reference of the base in the lid body.
+![Creating a new sketch for the lid](.images/screen-35.png)
 
-%%%screen-07
+You can treat the sub-shape binder as if it was a body for the purposes of creating external geometry references. That helps us quickly create a lid that references the shapes and dimensions of the base without needing to use global variables from our VarSet.
 
-3. **Create the Lid Sketch**:  
-   * Offset the sketch (rather than sketching directly on the sub-shape binder)  
-     * Click **Create Sketch**.  
-     * Select the **XY plane**.  
-     * After creating the sketch, adjust its position:  
-       * In the **Property** panel, under **Attachment** \> **Position**, set **Z** to `<<globals>>.base_height + globals.gap`.  
-4. **Draw the Lid Profile**:  
-   * Use the **Rounded Rectangle** tool to match the base's outer dimensions.  
-   * Make it symmetrical about the origin  
-   * Use the external geometry tool to bring in the outermost lines/fillet from the base sub-shape binder as reference lines  
-   * Set the top line, left line, and fillet to be equal to the external geometry
+ * Click the **Create external geometry** button
+ * Click on the top-left arc of the sub-shape binder
+   * You should see a dashed pink arc appear on top of the original arc
 
-%%%screen-08
+![Using external geometry](.images/screen-36.png)
 
-5. **Pad the Lid Sketch**:  
-   * Exit the sketch.  
-   * Select the sketch and click **Pad**.  
-   * Set the pad length: `<<globals>>.lid_height`.  
-6. **Create Shell**  
-   * Click the bottom face of the lid  
-   * Click the **Thickness** tool  
-     * Set the thickness: \<\<globals\>\>thickness  
-     * Click OK
+It can be difficult to see sketches sometimes, especially if the sketch plane is hidden by other geometry! To help with that, we can use the *View section* feature to slice out everything above the sketch plane.
 
-%%%screen-09
+ * Click the **View section** button
+   * This is a toggle mode--click it again to return to the regular view
 
-7. **Create the Inner Lip of the Lid**:  
-   * Create a new sketch on the bottom face (outer wall bottom face) of the lid  
-   * Draw a rounded rectangle for the lip that will fit over the base's lip.  
-   * Use expressions to set dimensions:  
-     * Length: `Sketch001.Constraints.lip_length + 2 * <<globals>>.gap`  
-     * Width: `Sketch001.Constraints.lip_width + 2 *` `<<globals>>.gap`  
-     * Fillet: `Sketch001.Constraints.lip_fillet +` `<<globals>>.gap`  
-   * **Pocket the Sketch**:  
-     * Exit the sketch.  
-     * Select the sketch and click **Pocket**.  
-     * Set the pocket length: `Pad001.Length`  
-8. **Change lid appearance**  
-   * Right-click on the lid in the Tree View, select **Appearance**  
-   * Change color via Custom appearance \> Ambient color  
-   * Change the Transparency with the slider in the Task Pane
+> **Note**: You can rotate your camera in a Sketch, just like you would for a 3D view. If you need to get back to a previous 2D view, click one of the sides of the *Navigation Cube* in the top-right corner of the main view.
 
-%%%screen-10
+![Using the view section feature](.images/screen-37.png)
 
-## **4\. Adding Chamfers and Fillets**
+ * Draw a **rounded rectangle**
+ * Make it **symmetric** about the origin
+ * Use **coincident constraints** to line up the top-left arc with the external geometry (dashed pink arc)
+ * If needed, delete any **redundant constraints**
+ * Make sure your sketch is **fully constrained**
+ * Click **Close** in the *Tasks* pane
 
-Adding chamfers and fillets enhances the aesthetic and functionality of your design.
+![Creating a matching rounded rectangle](.images/screen-38.png)
 
-### **Steps:**
+### 9. Move Sketch and Create Lid Extrusion
 
-1. **Click the Chamfer tool**  
-   * Task Pane will guide you through creating chamfers  
-2. **Select Edges for Chamfering**:  
-   * Click on the edges you want to chamfer (e.g., bottom edges of the base).  
-   * Hold **Ctrl** to select multiple edges.  
-3. **Apply Chamfer**:  
-   * Click the **Chamfer** icon.  
-   * Set the chamfer size (e.g., `2 mm`).  
-   * Click **OK**.
+Our sketch is ready to create the basic shape of our lid, but it would be nice if it was in a position that made it easier to see what was happening. One option would be to create the sketch on a face of the sub-shape binder. The other option is to move the *Attachment* of the sketch. Let's try the second option.
 
-%%%screen-11
+ * Select the new sketch (**Sketch003**), which should be highlighted gray in the *Tree view*
+ * In the *Properties* pane (just under the *Tree view*), drop down the **Attachment** sub-section
+ * Drop down the **Position** subsection
+ * Click on **z**, select the **function** button in the value field
+ * In the *Expression editor*, enter: `<<Dimensions>>.Base_BaseHeight + <<Dimensions>>.Base_Gap`
+ * Click **OK**
 
-## **5\. Exporting and 3D Printing**
+This should raise the sketch to just above the top of the base (below the lip).
 
-With your design complete, you're ready to export and 3D print. Feel free to check out our Introduction to 3D Printing series to learn more\!
+![Editing the sketch attachment](.images/screen-39.png)
 
-### **Steps:**
+ * With the sketch selected, click the **Pad** button
+ * Change the pad *Length* to: `<<Dimensions>>.Base_LidHeight`
 
-1. **Export Bodies as STL Files**:  
-   * Select the `base` body.  
-   * Go to **File** \> **Export**.  
-   * Choose **STL Mesh** format.  
-   * Name the file (e.g., `keepsake_box_base.stl`).  
-   * Repeat for the `lid` body.  
-2. **Prepare for 3D Printing**:  
-   * Open your slicing software (e.g., Cura, PrusaSlicer).  
-   * Import both STL files.  
-   * Arrange them on the print bed.  
-   * Adjust settings (layer height, infill, supports if needed).  
-   * Slice and save the G-code.  
-3. **Print the Model**:  
-   * Transfer the G-code to your 3D printer.  
-   * Begin printing and monitor the process.
+![Lid pad](.images/screen-40.png)
 
-%%%3d-printed-box
+### 10. Challenge: Finish the Lid
 
-## **Importing STEP Files for Reference**
+At this point, you should have all the necessary skills and tools to finish modeling the lid. Here is a recommended flow:
 
-Using STEP files allows you to design enclosures or mounts that fit existing components like a Raspberry Pi.
+Hide the sub-shape binder. Use a sketch on the bottom of the lid and a pocket to hollow it out.
 
-### **Steps:**
+![Hollow out lid](.images/screen-41.png)
 
-1. **Download a STEP File**:  
-   * Visit [GrabCAD](https://grabcad.com/), go to Library, and search for your component (e.g., [Raspberry Pi](https://grabcad.com/library/raspberry-pi-5-2)).  
-   * Download the STEP file.  
-2. **Import the STEP File into FreeCAD**:  
-   * Go to **File** \> **Import**.  
-   * Select the downloaded STEP file.  
-   * Wait for the import to complete.  
-3. **Adjust Orientation**:  
-   * If the model isn't oriented correctly:  
-     * Right-click on the imported part in the tree view.  
-     * Select **Transform**.  
-     * Rotate it as needed.  
-4. **Create a SubShapeBinder**:  
-   * Create a new body for your enclosure or mount.  
-   * With the new body active, select the imported part (e.g. PCB)  
-   * Click the **SubShapeBinder** icon.  
-   * Hide the original imported part.  
-5. **Create Sketches Using Reference Geometry**:  
-   * Use the **Sketcher** to create mounting holes or outlines.  
-   * Use the **External Geometry** tool to reference edges from the SubShapeBinder.
+Create a sketch on the bottom rim of the lid, and create an additional pocket for the lip. Don't forget to account for the gap!
 
-%%%screen-12
+![Create lip](.images/screen-42.png)
 
-6. **Design Your Enclosure or Mount**:  
-   * Create pads, pockets, and other features as needed.  
-   * Ensure all dimensions are accurate for a proper fit.
+Un-hide the sub-shape binder. You can go to *View > Clipping Plane* to see inside your box. Enable each of the X, Y, and Z planes in turn to look at how the base and lid line up. Make sure that the lip of the base will fit inside the lid!
 
-## **Challenge: Create a Mounting Plate**
+![Using a clipping plane](.images/screen-43.png)
 
-Now that you've learned how to use STEP files and SubShapeBinders, try designing a mounting plate for one of your development boards.
+Add a chamfer around the top edge of the lid to match what we did for the base.
 
-%%%rpi-plate
+![Adding a chamfer on the lid](.images/screen-44.png)
 
-### **Guidelines:**
+### 11. Adjusting Global Variables
 
-* **Choose a Board**: Arduino, Raspberry Pi, or any other PCB.  
-* **Import a STEP File**: Find and import the STEP file of your board.  
-* **Design the Mount**:  
-  * Use the board's mounting holes as references.  
-  * Create a plate with pegs or holes to secure the board.  
-* **Add Personal Touches**:  
-  * Incorporate design elements like logos or text.  
-  * Consider adding a snap-on lid or cover.  
-* **Share Your Creation**:  
-  * Take a screenshot or photo of your design.  
-  * Share it on social media with the hashtag `#DKFreeCAD`.  
-  * Tag relevant accounts to showcase your work.
+With our box complete, we can now see how the VarSet can be used to quickly adjust the entire box size and shape.
 
-## **8\. Conclusion**
+ * Click on the **Dimensions** VarSet in the *Tree view*
+ * Adjust some of the properties, like Base Height, Length, Lid Height, Lip, and Width
 
-Congratulations\! You've advanced your FreeCAD skills by learning how to work with multiple bodies, create assemblies, and use external references like STEP files. These techniques are invaluable for designing complex projects and ensuring your parts fit together perfectly.
+Notice that the sub-shape binder and lid automatically update, even if you adjust properties for the base!
 
-**Next Steps**:
+![Adjusting the VarSet properties](.images/screen-45.png)
 
-* Experiment with more complex assemblies.  
-* Explore additional FreeCAD workbenches for advanced features.  
-* Stay tuned for the next tutorial, where we'll dive into creating mounting holes and using heat-set inserts.
+> **Important!** after doing this, you should use the *View > Clipping Plane* again to make sure that the lid and base still line up (i.e. the is still present in both bodies). If you find any issues (e.g. the lip disappeared), go into the appropriate sketches to fix them.
 
-Happy designing\!
+![Check the lip](.images/screen-46.png)
 
-| Tags |  |
-| :---: | :---- |
-| **Development** |  |
-| **Platforms** |  |
-| **License** |  |
-| **DK Part Numbers** |  |
+### 12. Export for 3D Printing
 
+Once you're happy with your box, it's time to 3D print it! We need to export the bodies (base and lid) separately.
+
+> **Note**: I'll assume that you've reverted your VarSet dimensions back to their original values for this section
+
+ * Click to select the **base** in the *Tree view* (should be highlighted light blue)
+ * Select **File > Export...*
+ * Change the type (if needed) to **STL Mesh**
+ * Save the STL file somewhere on your computer
+
+![Save base as STL](.images/screen-47.png)
+
+ * Click to select the **lid** in the *Tree view* (should be highlighted light blue)
+ * Select **File > Export...*
+ * Change the type (if needed) to **STL Mesh**
+ * Save the STL file somewhere on your computer
+
+![Save lid as STL](.images/screen-48.png)
+
+ * Open your slicer program (I'll use Cura as a demo)
+ * Import your two STL files
+ * Rotate and position as needed for best 3D printing (e.g. avoid overhangs)
+
+![STL files in slicer](.images/screen-49.png)
+
+> Note that the chamfers are marked in red--they are considered an "overhang" by my slicer. Most modern FDM 3D printers can handle these 45° overhangs.
+
+When you are done making adjustments, slice and print your box!
+
+## License
+
+This tutorial (README.md) and FreeCAD design files (.FCStd) are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en).
