@@ -43,6 +43,8 @@ Run the installer for your OS.
 
 Open FreeCAD, and click **Edit > Preferences...** In the navigation pane on the left, go to **Display > Navigation**. For the *3D Navigation* setting, select **TinkerCAD**.
 
+> **Important!** If you are working on a laptop with just a touchpad, I recommend changing the navigation style to *Touchpad*.
+
 ![FreeCAD navigation setting in Preferences](.images/screen-01.png)
 
 > *Note*: I personally found the TinkerCAD navigation to be the most intuitive (i.e. it matched my Cura slicer navigation style). Feel free to try other navigation schemes to find one you like. Any navigation instructions given in this guide will be based on the TinkerCAD navigation style.
