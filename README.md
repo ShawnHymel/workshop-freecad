@@ -113,10 +113,11 @@ This process adds a value to the variable set. Note that we are using the type *
 ![Adding property to VarSet](.images/screen-07.png)
 
  * Click on the **0.00 mm** in the *Length* property value and change it to **60 mm**
- * Repeat this process to add the following properties:
+ * Repeat this process so you have the following properties:
    * BaseHeight: **15 mm**
    * Fillet: **4 mm**
    * Gap: **0.2 mm**
+   * Length: **60.0 mm**
    * LidHeight: **5 mm**
    * Lip: **2 mm**
    * Wall: **2 mm**
